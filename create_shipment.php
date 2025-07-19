@@ -16,28 +16,33 @@ use App\Exception\InPostApiException;
 
 require __DIR__ . '/vendor/autoload.php';
 
-function logMessage(string $message): void
+function logMessage(string $message, string $fileName = 'log.txt'): void
 {
     $timestamp = date('Y-m-d H:i:s');
-    file_put_contents('log.txt', "[{$timestamp}] {$message}" . PHP_EOL, FILE_APPEND);
+    file_put_contents($fileName, "[{$timestamp}] {$message}" . PHP_EOL, FILE_APPEND);
 }
+
+echo '[PROCESS] Loading environment variables...' . PHP_EOL;
 
 try {
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
     $dotenv -> load();
     $dotenv -> required(['INPOST_API_TOKEN', 'INPOST_API_URL']);
-
-    logMessage('Environment variables loaded successfully.');
 } catch (Exception $e) {
-    logMessage('Error loading environment variables: ' . $e -> getMessage());
+    echo "[ERROR] Configuration error: {$e->getMessage()}" . PHP_EOL;
+    echo "[ERROR] Please ensure the .env file exists and contains INPOST_API_TOKEN and INPOST_API_URL." . PHP_EOL;
     exit(1);
 }
 
-logMessage('Starting shipment creation process...');
+echo "[SUCCESS] Configuration loaded successfully." . PHP_EOL;
+logMessage("--- Starting new shipment creation process ---");
 
 try {
-    $organizationId = 5477;
     $api = new InPostApiClient($_ENV['INPOST_API_TOKEN'], $_ENV['INPOST_API_URL']);
+
+    echo "[PROCESS] Fetching organization ID..." . PHP_EOL;
+    $organizationId = $api -> organizations() -> getFirst();
+    echo "[SUCCESS] Organization ID fetched: {$organizationId}" . PHP_EOL;
 
     $shipment = new Shipment(
         receiver: new Recipient(
@@ -87,18 +92,36 @@ try {
         service: ServiceType::INPOST_LOCKER_STANDARD
     );
 
-    logMessage('Shipment object created successfully.');
+    echo "[PROCESS] Creating shipment in InPost system..." . PHP_EOL;
     $shipmentData = $api -> shipments() -> create($organizationId, $shipment);
 
-    while($shipmentData['status'] !== 'confirmed') {
-        logMessage('Shipment status: ' . $shipmentData['status'] . '. Retrying...');
-        sleep(1);
+    $maxAttempts = 10;
+    $attempt = 0;
+    $waitTime = 1;
+    
+    while($shipmentData['status'] !== 'confirmed' && $attempt < $maxAttempts) {
+        $attempt++;
+        echo "[PROCESS] Attempt {$attempt}/{$maxAttempts}: Shipment status: {$shipmentData['status']}." . PHP_EOL;
+        echo "[PROCESS] Status needed: confirmed." . PHP_EOL;
         
-        $shipmentData = $api -> shipments() -> get($shipmentData['id']);
+        if($attempt < $maxAttempts) {
+            echo "[PROCESS] Waiting for {$waitTime} seconds before next check..." . PHP_EOL;
+            sleep($waitTime);
+            
+            $waitTime *= 2;
+            
+            $shipmentData = $api -> shipments() -> get($shipmentData['id']);
+        }
+    }
+    
+    if($shipmentData['status'] !== 'confirmed') {
+        throw new Exception("Shipment confirmation failed after {$maxAttempts} attempts. Last status: {$shipmentData['status']}");
     }
 
-    logMessage('Shipment created successfully: ' . json_encode($shipmentData, JSON_PRETTY_PRINT));
-    logMessage('Dispatching shipment with ID: ' . $shipmentData['id']);
+    echo "[SUCCESS] Shipment created successfully! ID: {$shipmentData['id']}" . PHP_EOL;
+    logMessage("[SUCCESS] Shipment created." . PHP_EOL . json_encode($shipmentData, JSON_PRETTY_PRINT));
+    echo "[PROCESS] Ordering courier for shipment ID: {$shipmentData['id']}..." . PHP_EOL;
+
     $dispatchResponse = $api -> dispatchOrders() -> create($organizationId, new DispatchOrder(
         shipments: [$shipmentData['id']],
         address: new Address(
@@ -112,12 +135,21 @@ try {
         phone: '123456789'
     ));
 
-    logMessage('Dispatch order created successfully: ' . json_encode($dispatchResponse, JSON_PRETTY_PRINT));
-} catch(InPostApiException $e) {
-    logMessage('InPost API Exception: ' . $e -> getMessage());
-    logMessage('Response: ' . $e -> getResponseBodyAsString());
+    echo "[SUCCESS] Courier ordered successfully!" . PHP_EOL;
+    logMessage("[SUCCES] Courier ordered." . PHP_EOL . json_encode($dispatchResponse, JSON_PRETTY_PRINT));
+    echo "[SUCCESS] Process finished successfully. Check log.txt for details." . PHP_EOL;
+} catch (InPostApiException $e) {
+    echo "[ERROR] CRITICAL API ERROR" . PHP_EOL;
+    echo "[ERROR] Message: " . $e -> getMessage() . PHP_EOL;
+    echo "[ERROR] HTTP Code: " . $e -> getCode() . PHP_EOL;
+    logMessage("[ERROR] API ERROR: " . $e -> getMessage());
+    logMessage("[ERROR] Server Response: " . $e -> getResponseBodyAsString());
+
     exit(1);
-} catch(Throwable $e) {
-    logMessage('Script execution completed.' . "\n" . $e -> getTraceAsString());
+} catch (Throwable $e) {
+    echo "[ERROR] UNEXPECTED ERROR" . PHP_EOL;
+    echo "[ERROR] Message: " . $e -> getMessage() . PHP_EOL;
+    logMessage("[ERROR] UNEXPECTED ERROR: " . $e -> getMessage() . PHP_EOL . $e -> getTraceAsString());
+
     exit(1);
 }
