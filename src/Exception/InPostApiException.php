@@ -1,11 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exception;
 
 use Psr\Http\Message\ResponseInterface;
 use Exception;
 use Throwable;
 
+/**
+ * Class InPostApiException
+ * Custom exception for handling InPost API errors.
+ */
 class InPostApiException extends Exception
 {
     private ?ResponseInterface $response;

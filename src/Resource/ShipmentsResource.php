@@ -1,22 +1,31 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Resource;
 
-use App\Data\ShipmentData;
+use App\Data\Shipment;
 
+/**
+ * Class ShipmentsResource
+ * Resource for managing shipments in the InPost API.
+ * Extends AbstractResource to inherit common API request functionality.
+ * 
+ * @package App\Resource
+ */
 final readonly class ShipmentsResource extends AbstractResource
 {
-    public function create(int $organizationId, ShipmentData $shipmentData): array
+    public function create(int $organizationId, Shipment $shipmentData): array
     {
         $uri = "organizations/{$organizationId}/shipments";
 
-        return $this -> executeRequest('POST', $uri, ['json' => $shipmentData -> toArray()]);
+        return $this -> postRequest($uri, $shipmentData -> toArray());
     }
 
     public function get(int $organizationId, string $shipmentId): array
     {
         $uri = "organizations/{$organizationId}/shipments/{$shipmentId}";
 
-        return $this -> executeRequest('GET', $uri);
+        return $this -> getRequest($uri);
     }
 }

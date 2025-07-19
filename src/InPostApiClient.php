@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use App\Resource\DispatchOrdersResource;
@@ -7,6 +9,12 @@ use App\Resource\OrganizationsResource;
 use App\Resource\ShipmentsResource;
 use GuzzleHttp\Client as GuzzleClient;
 
+/**
+ * Class InPostApiClient
+ * Client for interacting with the InPost API.
+ * 
+ * @package App
+ */
 final readonly class InPostApiClient
 {
     private GuzzleClient $guzzleClient;

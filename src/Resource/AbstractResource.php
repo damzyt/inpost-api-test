@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Resource;
 
 use App\Exception\InPostApiException;
@@ -7,12 +9,30 @@ use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\Exception\RequestException;
 use JsonException;
 
+/**
+ * Class AbstractResource
+ * Base class for all resources interacting with the InPost API.
+ * Provides common functionality for making API requests with retry logic.
+ * 
+ * @package App\Resource
+ */
 abstract readonly class AbstractResource
 {
     protected const MAX_ATTEMPTS = 3;
     protected const INITIAL_DELAY_SECONDS = 1;
 
-    public function __construct(protected GuzzleClient $guzzleClient) {}
+    public function __construct(protected GuzzleClient $guzzleClient) 
+    {}
+
+    protected function postRequest(string $uri, array $data = []): array
+    {
+        return $this -> executeRequest('POST', $uri, ['json' => $data]);
+    }
+
+    protected function getRequest(string $uri, array $data = []): array
+    {
+        return $this -> executeRequest('GET', $uri, ['json' => $data]);
+    }
 
     protected function executeRequest(string $method, string $uri, array $options = []): array
     {
@@ -30,7 +50,9 @@ abstract readonly class AbstractResource
                 return json_decode($responseBody, true, 512, JSON_THROW_ON_ERROR);
             } catch (RequestException $e) {
                 if(!$e -> hasResponse()) {
-                    if($attempt === self::MAX_ATTEMPTS) throw new InPostApiException("Błąd sieciowy po {$attempt} próbach.", 0, $e);
+                    if($attempt === self::MAX_ATTEMPTS) {
+                        throw new InPostApiException("Error after {$attempt} attempts: " . $e -> getMessage(), 0, $e);
+                    }
 
                     sleep($delay);
                     $delay *= 2;
@@ -42,23 +64,25 @@ abstract readonly class AbstractResource
                 $statusCode = $response -> getStatusCode();
 
                 if($statusCode >= 400 && $statusCode < 500) {
-                    throw new InPostApiException("Błąd klienta API ({$statusCode}): " . $response -> getBody() -> getContents(), $statusCode, $e, $response);
+                    throw new InPostApiException("API client error ({$statusCode}): " . $response -> getBody() -> getContents(), $statusCode, $e, $response);
                 }
 
                 if($statusCode >= 500) {
-                    if($attempt === self::MAX_ATTEMPTS) throw new InPostApiException("Błąd serwera API ({$statusCode}) po {$attempt} próbach.", $statusCode, $e, $response);
+                    if($attempt === self::MAX_ATTEMPTS) {
+                        throw new InPostApiException("Server error ({$statusCode}) after {$attempt} attempts: " . $response -> getBody() -> getContents(), $statusCode, $e, $response);
+                    }
 
                     sleep($delay);
                     $delay *= 2;
 
                     continue;
                 }
-                throw new InPostApiException("Nieoczekiwany błąd.", 0, $e, $response);
+                throw new InPostApiException("Unexpected error: " . $e -> getMessage(), 0, $e, $response);
             } catch (JsonException $e) {
-                throw new InPostApiException("Nie udało się zdekodować odpowiedzi JSON.", 0, $e);
+                throw new InPostApiException("Failed to decode JSON response.", 0, $e);
             }
         }
 
-        throw new InPostApiException("Nie udało się wykonać zapytania po " . self::MAX_ATTEMPTS . " próbach.");
+        throw new InPostApiException("Failed to execute request after " . self::MAX_ATTEMPTS . " attempts.");
     }
 }
