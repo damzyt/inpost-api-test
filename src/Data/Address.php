@@ -11,7 +11,7 @@ namespace App\Data;
  * 
  * @package App\Data
  */
-final readonly class Address
+final class Address
 {
     /** 
      * @param string|null $line1 Optional first line of the address.
@@ -22,12 +22,12 @@ final readonly class Address
      * @param string $postCode
      */
     public function __construct(
-        public readonly ?string $line1 = null,
         public readonly string $city,
         public readonly string $buidlingNumber,
-        public readonly ?string $countryCode = null,
         public readonly string $street,
         public readonly string $postCode,
+        public readonly ?string $line1 = null,
+        public readonly ?string $countryCode = null
     ) {}
 
     /**
@@ -35,13 +35,13 @@ final readonly class Address
      */
     public function toArray(): array
     {
-        return [
-            'line1'           => $this -> line1,
+        return array_filter([
             'city'            => $this -> city,
             'building_number' => $this -> buidlingNumber,
-            'country_code'    => $this -> countryCode,
             'street'          => $this -> street,
             'post_code'       => $this -> postCode,
-        ];
+            'line1'           => $this -> line1,
+            'country_code'    => $this -> countryCode
+        ]);
     }
 }

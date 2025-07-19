@@ -15,7 +15,7 @@ use GuzzleHttp\Client as GuzzleClient;
  * 
  * @package App
  */
-final readonly class InPostApiClient
+final class InPostApiClient
 {
     private GuzzleClient $guzzleClient;
 

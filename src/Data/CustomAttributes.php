@@ -13,7 +13,7 @@ use App\Data\Enums\SendingMethod;
  * 
  * @package App\Data
  */
-final readonly class CustomAttributes
+final class CustomAttributes
 {
     /**
      * @param string|null $targetPoint
@@ -34,10 +34,10 @@ final readonly class CustomAttributes
      */
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'target_point'   => $this -> targetPoint,
             'dropoff_point'  => $this -> dropoffPoint,
             'sending_method' => $this -> sendingMethod ?-> value,
-        ];
+        ]);
     }
 }

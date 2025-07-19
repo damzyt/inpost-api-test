@@ -12,7 +12,7 @@ namespace App\Data;
  * @package App\Data
  */
 
-final readonly class Sender
+final class Sender
 {
     /**
      * @param string|null $companyName
@@ -39,13 +39,13 @@ final readonly class Sender
      */
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'company_name' => $this -> companyName,
             'email'        => $this -> email,
             'phone'        => $this -> phone,
             'address'      => $this -> address -> toArray(),
             'first_name'   => $this -> firstName,
             'last_name'    => $this -> lastName,
-        ];
+        ]);
     }
 }

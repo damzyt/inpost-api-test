@@ -11,7 +11,7 @@ namespace App\Data;
  * 
  * @package App\Data
  */
-final readonly class Recipient
+final class Recipient
 {   
     /**
      * @param string|null $companyName
@@ -39,7 +39,7 @@ final readonly class Recipient
      */
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'company_name' => $this -> companyName,
             'name'         => $this -> name,
             'email'        => $this -> email,
@@ -47,6 +47,6 @@ final readonly class Recipient
             'first_name'   => $this -> firstName,
             'last_name'    => $this -> lastName,
             'phone'        => $this -> phone,
-        ];
+        ]);
     }
 }

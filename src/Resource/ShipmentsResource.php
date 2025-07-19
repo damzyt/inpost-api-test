@@ -13,7 +13,7 @@ use App\Data\Shipment;
  * 
  * @package App\Resource
  */
-final readonly class ShipmentsResource extends AbstractResource
+class ShipmentsResource extends AbstractResource
 {
     public function create(int $organizationId, Shipment $shipmentData): array
     {
@@ -22,9 +22,9 @@ final readonly class ShipmentsResource extends AbstractResource
         return $this -> postRequest($uri, $shipmentData -> toArray());
     }
 
-    public function get(int $organizationId, string $shipmentId): array
+    public function get(string $shipmentId): array
     {
-        $uri = "organizations/{$organizationId}/shipments/{$shipmentId}";
+        $uri = "shipments/{$shipmentId}";
 
         return $this -> getRequest($uri);
     }

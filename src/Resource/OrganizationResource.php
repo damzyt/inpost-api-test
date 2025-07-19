@@ -13,7 +13,7 @@ use App\Exception\InPostApiException;
  * 
  * @package App\Resource
  */
-final readonly class OrganizationsResource extends AbstractResource
+class OrganizationsResource extends AbstractResource
 {
     public function list(): array
     {

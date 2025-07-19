@@ -12,14 +12,14 @@ namespace App\Data;
  * @package App\Data
  */
 
-final readonly class Weight
+final class Weight
 {   
     /**
-     * @param float|null $amount Weight amount.
+     * @param float $amount Weight amount.
      * @param string $unit Unit of Weight, default is 'kg'.
      */
     public function __construct(
-        public readonly ?float $amount,
+        public readonly float $amount,
         public readonly string $unit = 'kg'
     ) {}
 

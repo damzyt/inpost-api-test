@@ -11,7 +11,7 @@ namespace App\Data;
  * 
  * @package App\Data
  */
-final readonly class Cod
+final class Cod
 {
     /**
      * @param float $amount Amount for the COD.

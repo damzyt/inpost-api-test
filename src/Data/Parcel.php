@@ -13,7 +13,7 @@ use App\Data\Enums\ParcelTemplate;
  * 
  * @package App\Data
  */
-final readonly class Parcel
+final class Parcel
 {
     public function __construct(
         public ?Dimensions $dimensions = null,
@@ -30,12 +30,12 @@ final readonly class Parcel
      */
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'dimensions'      => $this -> dimensions ?-> toArray(),
             'template'        => $this -> template ?-> value,
             'weight'          => $this -> weight ?-> toArray(),
             'id'              => $this -> id,
             'is_not_standard' => $this -> isNotStandard
-        ];
+        ]);
     }
 }

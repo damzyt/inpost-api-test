@@ -14,16 +14,16 @@ use App\Data\Enums\AdditionalService;
  * 
  * @package App\Data
  */
-final readonly class Shipment
+final class Shipment
 {   
     /**
-     * @param Recipient|null $recipient
+     * @param Recipient|null $receiver
      * @param Sender|null $sender
      * @param Parcel[] $parcels
      * @param CustomAttributes|null $customAttributes
      * @param Cod|null $cod
      * @param Insurance|null $insurance
-     * @param string $reference
+     * @param string|null $reference
      * @param bool|null $isReturn
      * @param ServiceType $service
      * @param AdditionalService[]|null $additionalServices
@@ -33,13 +33,13 @@ final readonly class Shipment
      * @param string|null $comments
      */
     public function __construct(
-        public readonly ?Recipient $recipient = null,
+        public readonly ?Recipient $receiver = null,
         public readonly ?Sender $sender = null,
         public readonly array $parcels,
         public readonly ?CustomAttributes $customAttributes = null,
         public readonly ?Cod $cod = null,
         public readonly ?Insurance $insurance = null,
-        public readonly string $reference,
+        public readonly ?string $reference = null,
         public readonly ?bool $isReturn = null,
         public readonly ServiceType $service = ServiceType::INPOST_COURIER_STANDARD,
         public readonly ?array $additionalServices = null,
@@ -56,21 +56,21 @@ final readonly class Shipment
      */
     public function toArray(): array
     {
-        return [
-            'recipient'          => $this -> recipient -> toArray(),
-            'sender'             => $this -> sender -> toArray(),
-            'parcels'            => array_map(fn($parcel) => $parcel -> toArray(), $this -> parcels),
-            'customAttributes'   => $this -> customAttributes ?-> toArray(),
-            'cod'                => $this -> cod ?-> toArray(),
-            'insurance'          => $this -> insurance -> toArray(),
-            'reference'          => $this -> reference,
-            'isReturn'           => $this -> isReturn,
-            'service'            => $this -> service,
-            'additionalServices' => $this -> additionalServices ? array_map(fn(AdditionalService $service) => $service -> value, $this -> additionalServices) : null,
-            'externalCustomerId' => $this -> externalCustomerId,
-            'onlyChoiceOfOffer'  => $this -> onlyChoiceOfOffer,
-            'mpk'                => $this -> mpk,
-            'comments'           => $this -> comments,
-        ];
+        return array_filter([
+            'receiver'             => $this -> receiver ?-> toArray(),
+            'sender'               => $this -> sender ?-> toArray(),
+            'parcels'              => array_map(fn($parcel) => $parcel -> toArray(), $this -> parcels),
+            'custom_attributes'    => $this -> customAttributes ?-> toArray(),
+            'cod'                  => $this -> cod ?-> toArray(),
+            'insurance'            => $this -> insurance ?-> toArray(),
+            'reference'            => $this -> reference,
+            'isReturn'             => $this -> isReturn,
+            'service'              => $this -> service -> value,
+            'additional_services'  => $this -> additionalServices ? array_map(fn(AdditionalService $service) => $service -> value, $this -> additionalServices) : null,
+            'external_customer_id' => $this -> externalCustomerId,
+            'only_choice_of_offer' => $this -> onlyChoiceOfOffer,
+            'mpk'                  => $this -> mpk,
+            'comments'             => $this -> comments,
+        ]);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Resource;
 
+use App\Data\DispatchOrder;
+
 /**
  * Class DispatchOrdersResource
  * Resource for managing dispatch orders in the InPost API.
@@ -11,12 +13,12 @@ namespace App\Resource;
  * 
  * @package App\Resource
  */
-final readonly class DispatchOrdersResource extends AbstractResource
+class DispatchOrdersResource extends AbstractResource
 {
-    public function create(int $organizationId, array $payload): array
+    public function create(int $organizationId, DispatchOrder $dispatchOrderData): array
     {
-        $uri = "organizations/{$organizationId}/dispatch-orders";
+        $uri = "organizations/{$organizationId}/dispatch_orders";
 
-        return $this -> postRequest($uri, $payload);
+        return $this -> postRequest($uri, $dispatchOrderData -> toArray());
     }
 }

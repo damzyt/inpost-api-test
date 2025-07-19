@@ -11,7 +11,7 @@ namespace App\Data;
  * 
  * @package App\Data
  */
-final readonly class Dimensions
+final class Dimensions
 {   
     /**
      * @param float $height
@@ -33,11 +33,11 @@ final readonly class Dimensions
      */
     public function toArray(): array
     {
-        return [
+        return array_filter([
             'height' => $this -> height,
             'length' => $this -> length,
             'width'  => $this -> width,
             'unit'   => $this -> unit,
-        ];
+        ]);
     }
 }

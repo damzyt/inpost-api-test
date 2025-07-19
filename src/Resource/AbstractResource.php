@@ -16,7 +16,7 @@ use JsonException;
  * 
  * @package App\Resource
  */
-abstract readonly class AbstractResource
+class AbstractResource
 {
     protected const MAX_ATTEMPTS = 3;
     protected const INITIAL_DELAY_SECONDS = 1;
@@ -31,7 +31,7 @@ abstract readonly class AbstractResource
 
     protected function getRequest(string $uri, array $data = []): array
     {
-        return $this -> executeRequest('GET', $uri, ['json' => $data]);
+        return $this -> executeRequest('GET', $uri, ['query' => $data]);
     }
 
     protected function executeRequest(string $method, string $uri, array $options = []): array

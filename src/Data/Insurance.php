@@ -12,7 +12,7 @@ namespace App\Data;
  * @package App\Data
  */
 
-final readonly class Insurance
+final class Insurance
 {   
     /**
      * @param float $amount Insurance amount.
