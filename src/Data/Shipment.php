@@ -1,26 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Data\Enums\ServiceType;
 use App\Data\Enums\AdditionalService;
 
 /**
- * Represents shipment data as defined in the InPost API.
+ * Class Shipment
+ * Represents shipment as defined in the InPost API.
  * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731061/Tworzenie+przesy+ki+w+trybie+uproszczonym
  * 
- * Object is immutable
+ * @package App\Data
  */
-
-final readonly class ShipmentData
+final readonly class Shipment
 {   
     /**
-     * @param Recipient $recipient
-     * @param Sender $sender
+     * @param Recipient|null $recipient
+     * @param Sender|null $sender
      * @param Parcel[] $parcels
      * @param CustomAttributes|null $customAttributes
      * @param Cod|null $cod
-     * @param Insurance $insurance
+     * @param Insurance|null $insurance
      * @param string $reference
      * @param bool|null $isReturn
      * @param ServiceType $service
@@ -31,24 +33,24 @@ final readonly class ShipmentData
      * @param string|null $comments
      */
     public function __construct(
-        public ?Recipient $recipient = null,
-        public ?Sender $sender = null,
-        public array $parcels,
-        public ?CustomAttributes $customAttributes = null,
-        public ?Cod $cod = null,
-        public ?Insurance $insurance = null,
-        public string $reference,
-        public ?bool $isReturn = null,
-        public ServiceType $service = ServiceType::INPOST_COURIER_STANDARD,
-        public ?array $additionalServices = null,
-        public ?string $externalCustomerId = null,
-        public ?bool $onlyChoiceOfOffer = null,
-        public ?string $mpk = null,
-        public ?string $comments = null
+        public readonly ?Recipient $recipient = null,
+        public readonly ?Sender $sender = null,
+        public readonly array $parcels,
+        public readonly ?CustomAttributes $customAttributes = null,
+        public readonly ?Cod $cod = null,
+        public readonly ?Insurance $insurance = null,
+        public readonly string $reference,
+        public readonly ?bool $isReturn = null,
+        public readonly ServiceType $service = ServiceType::INPOST_COURIER_STANDARD,
+        public readonly ?array $additionalServices = null,
+        public readonly ?string $externalCustomerId = null,
+        public readonly ?bool $onlyChoiceOfOffer = null,
+        public readonly ?string $mpk = null,
+        public readonly ?string $comments = null
     ) {}
 
     /**
-     * Converts the ShipmentData object to an associative array.
+     * Converts the Shipment object to an associative array.
      *
      * @return array
      */

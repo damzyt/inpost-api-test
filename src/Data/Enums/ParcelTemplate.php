@@ -3,10 +3,8 @@
 namespace App\Data\Enums;
 
 /**
- * Represents the parcel templates as defined in the InPost API.
+ * Defines the parcel templates constants available in the InPost API.
  * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Wymiary-i-wagi-przesy%C5%82ek
- * 
- * Enum is immutable
  */
 
 enum ParcelTemplate: string

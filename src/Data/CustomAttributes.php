@@ -1,28 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use App\Data\Enums\SendingMethod;
 
 /**
+ * Class CustomAttributes
  * Represents custom attributes as defined in the InPost API.
  * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Custom-Attributes-Form
  * 
- * Object is immutable
+ * @package App\Data
  */
-
 final readonly class CustomAttributes
 {
     /**
-     * @param string|null $targetPoint Target point for the package.
-     * @param string|null $dropoffPoint Drop-off point for the package.
-     * @param SendingMethod|null $sendingMethod Sending method, if applicable.
+     * @param string|null $targetPoint
+     * @param string|null $dropoffPoint
+     * @param SendingMethod|null $sendingMethod
      */
 
     public function __construct(
-        public ?string $targetPoint = null,
-        public ?string $dropoffPoint = null,
-        public ?SendingMethod $sendingMethod = null
+        public readonly ?string $targetPoint = null,
+        public readonly ?string $dropoffPoint = null,
+        public readonly ?SendingMethod $sendingMethod = null
     ) {}
 
     /**
@@ -32,10 +34,10 @@ final readonly class CustomAttributes
      */
     public function toArray(): array
     {
-        return array_filter([
+        return [
             'target_point'   => $this -> targetPoint,
             'dropoff_point'  => $this -> dropoffPoint,
             'sending_method' => $this -> sendingMethod ?-> value,
-        ], fn($value) => $value !== null);
+        ];
     }
 }

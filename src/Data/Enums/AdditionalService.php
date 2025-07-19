@@ -3,10 +3,8 @@
 namespace App\Data\Enums;
 
 /**
- * Represents additional services as defined in the InPost API.
+ * Defines the additional services constants available in the InPost API.
  * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Us%C5%82ugi-dodatkowe.1
- * 
- * Enum is immutable
  */
 enum AdditionalService: string
 {
