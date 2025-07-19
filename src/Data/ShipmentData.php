@@ -2,8 +2,8 @@
 
 namespace App\Data;
 
-use App\Data\Enums\AdditionalService;
 use App\Data\Enums\ServiceType;
+use App\Data\Enums\AdditionalService;
 
 /**
  * Represents shipment data as defined in the InPost API.
@@ -13,7 +13,7 @@ use App\Data\Enums\ServiceType;
  */
 
 final readonly class ShipmentData
-{       
+{   
     /**
      * @param Recipient $recipient
      * @param Sender $sender
@@ -31,12 +31,12 @@ final readonly class ShipmentData
      * @param string|null $comments
      */
     public function __construct(
-        public Recipient $recipient,
-        public Sender $sender,
+        public ?Recipient $recipient = null,
+        public ?Sender $sender = null,
         public array $parcels,
         public ?CustomAttributes $customAttributes = null,
         public ?Cod $cod = null,
-        public Insurance $insurance,
+        public ?Insurance $insurance = null,
         public string $reference,
         public ?bool $isReturn = null,
         public ServiceType $service = ServiceType::INPOST_COURIER_STANDARD,
@@ -46,9 +46,9 @@ final readonly class ShipmentData
         public ?string $mpk = null,
         public ?string $comments = null
     ) {}
-    
+
     /**
-     * Converts the ShipmentData object object to an associative array.
+     * Converts the ShipmentData object to an associative array.
      *
      * @return array
      */

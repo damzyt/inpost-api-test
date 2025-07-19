@@ -2,6 +2,8 @@
 
 namespace App\Data;
 
+use App\Validation\ValidatableInterface;
+
 /**
  * Represents Cash on Delivery (COD) as defined in the InPost API.
  * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Cod-Form
@@ -9,7 +11,7 @@ namespace App\Data;
  * Object is immutable
  */
 
-final readonly class Cod
+final readonly class Cod implements ValidatableInterface
 {
     /**
      * @param float $amount Amount for the COD.
@@ -19,6 +21,21 @@ final readonly class Cod
         public float $amount,
         public string $currency = 'PLN'
     ) {}
+
+    public function validate(): void
+    {
+        if($this -> amount < 1) {
+            throw new \InvalidArgumentException('
+                COD amount must be greater or equal 1.
+            ');
+        }
+
+        if($this -> amount > 1000000) {
+            throw new \InvalidArgumentException('
+                COD amount must be less or equal 1000000.
+            ');
+        }
+    }
 
     /**
      * Converts the Cod object to an associative array.

@@ -37,10 +37,10 @@ enum ServiceType: string
             self::INPOST_LOCKER_STANDARD,
             self::INPOST_LOCKER_ALLEGRO,
             self::INPOST_LOCKER_PASS_THRU,
-            self::INPOST_LETTER_ALLEGRO => ServiceCategory::Locker,
-
+            self::INPOST_LETTER_ALLEGRO,
             self::INPOST_COURIER_ALLEGRO,
-            self::INPOST_COURIER_C2C,
+            self::INPOST_COURIER_C2C => ServiceCategory::Locker,
+            
             self::INPOST_COURIER_STANDARD,
             self::INPOST_COURIER_EXPRESS_1000,
             self::INPOST_COURIER_EXPRESS_1200,
