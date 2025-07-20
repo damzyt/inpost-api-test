@@ -32,7 +32,7 @@ $logger = new Logger();
 $logger->separator('Starting new shipment creation process');
 
 try {
-    $api = new InPostApiClient($config['apiToken'], $config['isSandbox']);
+    $api = InPostApiClient::fromConfig($config);
 
     // Get organization ID if not specified
     if ($config['organizationId'] === null) {

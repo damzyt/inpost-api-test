@@ -21,6 +21,23 @@ final class InPostApiClient
     private GuzzleClient $guzzleClient;
 
     /**
+     * Create InPost API client instance with configuration array.
+     * 
+     * Factory method that creates client instance from configuration array.
+     * Simplifies client creation and provides clear configuration structure.
+     * 
+     * @param array{apiToken: string, isSandbox?: bool} $config Configuration array
+     * @return self New instance of InPostApiClient
+     */
+    public static function fromConfig(array $config): self
+    {
+        return new self(
+            apiToken: $config['apiToken'],
+            isSandbox: $config['isSandbox'] ?? false
+        );
+    }
+
+    /**
      * Constructor for InPost API Client.
      * 
      * Initializes the Guzzle HTTP client with the provided API token.
