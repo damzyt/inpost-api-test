@@ -7,8 +7,8 @@ namespace App\Data;
 /**
  * Class Cod
  * Represents COD as defined in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Cod-Form
  * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Cod-Form
  * @package App\Data
  */
 final class Cod
@@ -25,13 +25,16 @@ final class Cod
     /**
      * Converts the Cod object to an associative array.
      * 
-     * @return array
+     * Transforms COD properties into an array format suitable for API requests.
+     * Returns the amount and currency for cash-on-delivery configuration.
+     * 
+     * @return array The COD data as an associative array with API-compatible structure
      */
     public function toArray(): array
     {
         return [
-            'amount'   => $this -> amount,
-            'currency' => $this -> currency,
+            'amount'   => $this->amount,
+            'currency' => $this->currency,
         ];
     }
 }

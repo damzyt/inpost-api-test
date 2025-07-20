@@ -1,10 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data\Enums;
 
 /**
  * Defines the additional services constants available in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Us%C5%82ugi-dodatkowe.1
+ * 
+ * Enum containing additional service options that can be applied to shipments,
+ * such as insurance, cash on delivery, and notification services.
+ * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Us%C5%82ugi-dodatkowe.1
+ * @package App\Data\Enums
  */
 enum AdditionalService: string
 {

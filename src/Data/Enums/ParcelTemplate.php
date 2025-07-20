@@ -1,12 +1,18 @@
 <?php 
 
+declare(strict_types=1);
+
 namespace App\Data\Enums;
 
 /**
  * Defines the parcel templates constants available in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Wymiary-i-wagi-przesy%C5%82ek
+ * 
+ * Enum containing predefined parcel size templates for standardized
+ * shipment dimensions and weight specifications.
+ * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#Wymiary-i-wagi-przesy%C5%82ek
+ * @package App\Data\Enums
  */
-
 enum ParcelTemplate: string
 {
     // STANDARD

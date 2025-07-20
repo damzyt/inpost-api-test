@@ -7,13 +7,15 @@ namespace App\Data;
 /**
  * Class Recipient
  * Represents a recipient as defined in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Receiver-Form
  * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Receiver-Form
  * @package App\Data
  */
 final class Recipient
 {   
     /**
+     * Recipient constructor.
+     * 
      * @param string|null $companyName
      * @param string|null $name
      * @param string $email
@@ -35,18 +37,21 @@ final class Recipient
     /**
      * Converts the Recipient object to an associative array.
      * 
-     * @return array
+     * Transforms recipient properties into an array format suitable for API requests.
+     * Filters out null values and handles nested address object conversion.
+     * 
+     * @return array The recipient data as an associative array with API-compatible structure
      */
     public function toArray(): array
     {
         return array_filter([
-            'company_name' => $this -> companyName,
-            'name'         => $this -> name,
-            'email'        => $this -> email,
-            'address'      => $this -> address -> toArray(),
-            'first_name'   => $this -> firstName,
-            'last_name'    => $this -> lastName,
-            'phone'        => $this -> phone,
+            'company_name' => $this->companyName,
+            'name'         => $this->name,
+            'email'        => $this->email,
+            'address'      => $this->address->toArray(),
+            'first_name'   => $this->firstName,
+            'last_name'    => $this->lastName,
+            'phone'        => $this->phone,
         ]);
     }
 }

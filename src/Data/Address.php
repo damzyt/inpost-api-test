@@ -7,8 +7,8 @@ namespace App\Data;
 /**
  * Class Address
  * Represents an Address as defined in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Address-Form
  * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Address-Form
  * @package App\Data
  */
 final class Address
@@ -31,17 +31,22 @@ final class Address
     ) {}
 
     /**
-     * @return array
+     * Converts the Address object to an associative array.
+     * 
+     * Transforms all address properties into an array format suitable for API requests.
+     * Filters out null values and maps property names to API-compatible field names.
+     *
+     * @return array The address data as an associative array with API-compatible structure
      */
     public function toArray(): array
     {
         return array_filter([
-            'city'            => $this -> city,
-            'building_number' => $this -> buidlingNumber,
-            'street'          => $this -> street,
-            'post_code'       => $this -> postCode,
-            'line1'           => $this -> line1,
-            'country_code'    => $this -> countryCode
+            'city'            => $this->city,
+            'building_number' => $this->buidlingNumber,
+            'street'          => $this->street,
+            'post_code'       => $this->postCode,
+            'line1'           => $this->line1,
+            'country_code'    => $this->countryCode
         ]);
     }
 }

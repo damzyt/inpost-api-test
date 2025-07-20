@@ -7,8 +7,8 @@ namespace App\Data;
 /**
  * Class Dimensions
  * Represents dimensions as defined in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Dimensions-Simple-Form
  * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Dimensions-Simple-Form
  * @package App\Data
  */
 final class Dimensions
@@ -29,15 +29,18 @@ final class Dimensions
     /**
      * Converts the Dimensions object to an associative array.
      * 
-     * @return array
+     * Transforms all dimension properties into an array format suitable for API requests.
+     * Filters out null values while preserving the unit specification.
+     * 
+     * @return array The dimensions data as an associative array with API-compatible structure
      */
     public function toArray(): array
     {
         return array_filter([
-            'height' => $this -> height,
-            'length' => $this -> length,
-            'width'  => $this -> width,
-            'unit'   => $this -> unit,
+            'height' => $this->height,
+            'length' => $this->length,
+            'width'  => $this->width,
+            'unit'   => $this->unit,
         ]);
     }
 }

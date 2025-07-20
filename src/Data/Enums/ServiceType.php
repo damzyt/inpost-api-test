@@ -1,11 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data\Enums;
 
 /**
- * Defines the service types constasts available in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#InPost-Paczkomat%C2%AE
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#InPost-Kurier
+ * Defines the service types constants available in the InPost API.
+ * 
+ * Enum containing all available service types for InPost shipments,
+ * including both Paczkomat® and Courier service options.
+ * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#InPost-Paczkomat%C2%AE
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731062/Rozmiary+i+us+ugi+dla+przesy+ek#InPost-Kurier
+ * @package App\Data\Enums
  */
 enum ServiceType: string
 {   

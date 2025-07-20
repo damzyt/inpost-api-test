@@ -1,10 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data\Enums;
 
 /**
- * Defines the sending methods constasts available in the InPost API.
- * https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Custom-Attributes-Form
+ * Defines the sending methods constants available in the InPost API.
+ * 
+ * Enum containing different sending method options for shipments,
+ * including parcel lockers, pickup points, and courier services.
+ * 
+ * @see https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731043/Walidacja+formularzy#Custom-Attributes-Form
+ * @package App\Data\Enums
  */
 enum SendingMethod: string
 {
