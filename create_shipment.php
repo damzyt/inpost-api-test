@@ -3,13 +3,15 @@
 declare(strict_types=1);
 
 use App\Data\Address;
-use App\Data\CustomAttributes;
+use App\Data\Cod;
 use App\Data\Dimensions;
 use App\Data\DispatchOrder;
+use App\Data\Enums\AdditionalService;
 use App\Data\Enums\ServiceType;
+use App\Data\CustomAttributes;
 use App\Data\Insurance;
 use App\Data\Parcel;
-use App\Data\Recipient;
+use App\Data\Receiver;
 use App\Data\Sender;
 use App\Data\Shipment;
 use App\Data\Weight;
@@ -45,8 +47,10 @@ try {
     }
 
     // Create shipment with example data
+    // Based on https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/11731061/Tworzenie+przesy+ki+w+trybie+uproszczonym#Pojedyncza-paczka-dla-przesy%C5%82ki-kurierskiej%3A
     $shipment = new Shipment(
-        receiver: new Recipient(
+        service: ServiceType::INPOST_COURIER_STANDARD,
+        receiver: new Receiver(
             firstName: 'Jan',
             lastName: 'Kowalski',
             email: 'jan.kowalski@example.com',
@@ -61,6 +65,8 @@ try {
         ),
         sender: new Sender(
             companyName: 'InPost',
+            firstName: 'Marek',
+            lastName: 'InPostowy',
             email: 'inpost@example.com',
             phone: '123456789',
             address: new Address(
@@ -74,23 +80,33 @@ try {
         parcels: [
             new Parcel(
                 dimensions: new Dimensions(
-                    height: 10,
-                    length: 20,
-                    width: 30
+                    height: 50,
+                    length: 80,
+                    width: 60,
+                    unit: 'mm'
                 ),
                 weight: new Weight(
-                    amount: 2.5
+                    amount: 5,
+                    unit: 'kg'
                 ),
                 id: 'example-parcel-id',
+                isNotStandard: false
             )
         ],
-        customAttributes: new CustomAttributes(
-            targetPoint: 'KRA010'
-        ),
         insurance: new Insurance(
-            amount: 100
+            amount: 100,
+            currency: 'PLN'
         ),
-        service: ServiceType::INPOST_LOCKER_STANDARD
+        cod: new Cod(
+            amount: 10,
+            currency: 'PLN'
+        ),
+        additionalServices: [
+            AdditionalService::SMS,
+            AdditionalService::EMAIL
+        ],
+        reference: 'TestShipment123',
+        comments: 'This is a test shipment',
     );
 
     $logger->process('Creating shipment in InPost system...');
@@ -112,6 +128,7 @@ try {
             $waitTime *= 2;
             
             $shipmentData = $api->shipments()->get($shipmentData['id']);
+            $logger->logJsonData('CURRENT SHIPMENT DATA', $shipmentData);
         }
     }
     
@@ -140,14 +157,24 @@ try {
 } catch (InPostApiException $e) {
     $logger->error('CRITICAL API ERROR');
     $logger->error("HTTP Code: {$e->getCode()}");
-    $logger->error("API ERROR: {$e->getMessage()}");
-    $logger->error("Server Response: {$e->getResponseBodyAsString()}");
+    $logger->error("Message: {$e->getMessage()}");
+    $logger->logJsonData('API ERROR DETAILS', [
+        'http_code'     => $e->getCode(),
+        'error_message' => $e->getMessage(),
+        'api_response'  => $e->getResponseBodyAsString(),
+    ]);
 
     exit(1);
 } catch (Throwable $e) {
     $logger->error('UNEXPECTED ERROR');
     $logger->error("Message: {$e->getMessage()}");
-    $logger->error("UNEXPECTED ERROR: {$e->getMessage()}" . PHP_EOL . $e->getTraceAsString());
+    $logger->logJsonData('UNEXPECTED ERROR DETAILS', [
+        'error_type' => get_class($e),
+        'message'    => $e->getMessage(),
+        'file'       => $e->getFile(),
+        'line'       => $e->getLine(),
+        'trace'      => $e->getTraceAsString()
+    ]);
 
     exit(1);
 }

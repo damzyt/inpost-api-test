@@ -114,6 +114,18 @@ final class Logger
     }
 
     /**
+     * Log JSON data to file with label.
+     * 
+     * @param string $label Label for the JSON data
+     * @param array $data Data to log in JSON format
+     */
+    public function logJsonData(string $label, array $data): void
+    {
+        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
+        $this->writeToFile("[JSON] {$label}:" . PHP_EOL . $jsonData);
+    }
+
+    /**
      * Output message to console with automatic line ending.
      * 
      * @param string $message The message to output
@@ -132,17 +144,5 @@ final class Logger
     {
         $timestamp = date('Y-m-d H:i:s');
         file_put_contents($this->logFile, "[{$timestamp}] {$message}" . PHP_EOL, FILE_APPEND);
-    }
-
-    /**
-     * Log JSON data to file with label.
-     * 
-     * @param string $label Label for the JSON data
-     * @param array $data Data to log in JSON format
-     */
-    private function logJsonData(string $label, array $data): void
-    {
-        $jsonData = json_encode($data, JSON_PRETTY_PRINT);
-        $this->writeToFile("[JSON] {$label}:" . PHP_EOL . $jsonData);
     }
 }

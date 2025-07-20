@@ -71,6 +71,69 @@ Skrypt zawiera kompletną obsługę błędów:
 - Błędy konfiguracji
 - Nieoczekiwane błędy
 
+## Uwagi dotyczące środowiska testowego
+
+Zgodnie z poleceniem, skrypt jest skonfigurowany do tworzenia przesyłki typu `inpost_courier_standard`.
+
+Podczas testów zauważono, że środowisko sandbox API InPost może mieć ograniczenia w obsłudze tego typu usługi, co uniemożliwia pełne przetestowanie ścieżki kurierskiej. W celu weryfikacji poprawnego działania logiki i komunikacji z API, lokalne testy przeprowadzono z użyciem usługi `inpost_locker_standard`, która jest w pełni wspierana przez sandbox.
+
+Zamieszczony kod zawiera docelową, wymaganą w zadaniu implementację.
+
+Kod obiektu shipment wykorzystanego do testów:
+```php
+$shipment = new Shipment(
+    service: ServiceType::INPOST_LOCKER_STANDARD,
+    receiver: new Receiver(
+        firstName: 'Jan',
+        lastName: 'Kowalski',
+        email: 'jan.kowalski@example.com',
+        phone: '123456789',
+        address: new Address(
+            street: 'Pomysłowa',
+            buidlingNumber: '10',
+            city: 'Warszawa',
+            postCode: '00-001',
+            countryCode: 'PL'
+        )   
+    ),
+    sender: new Sender(
+        companyName: 'InPost',
+        email: 'inpost@example.com',
+        firstName: 'Marek',
+        lastName: 'InPostowy',
+        phone: '123456789',
+        address: new Address(
+            street: 'InPostowa',
+            buidlingNumber: '1',
+            city: 'Kraków',
+            postCode: '30-001',
+            countryCode: 'PL'
+        )
+    ),
+    parcels: [
+        new Parcel(
+            dimensions: new Dimensions(
+                height: 10,
+                length: 20,
+                width: 30
+            ),
+            weight: new Weight(
+                amount: 2.5
+            ),
+            id: 'example-parcel-id',
+        )
+    ],
+    customAttributes: new CustomAttributes(
+        targetPoint: 'KRA010'
+    ),
+    insurance: new Insurance(
+        amount: 100
+    ),
+    reference: 'TestShipment123',
+    comments: 'This is a test shipment',
+);
+```
+
 ## Licencja
 
 Proprietary

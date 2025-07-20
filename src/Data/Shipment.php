@@ -19,7 +19,7 @@ final class Shipment
     /**
      * @param Parcel[] $parcels
      * @param ServiceType $service
-     * @param Recipient|null $receiver
+     * @param Receiver|null $receiver
      * @param Sender|null $sender
      * @param CustomAttributes|null $customAttributes
      * @param Cod|null $cod
@@ -35,7 +35,7 @@ final class Shipment
     public function __construct(
         public readonly array $parcels,
         public readonly ServiceType $service = ServiceType::INPOST_COURIER_STANDARD,
-        public readonly ?Recipient $receiver = null,
+        public readonly ?Receiver $receiver = null,
         public readonly ?Sender $sender = null,
         public readonly ?CustomAttributes $customAttributes = null,
         public readonly ?Cod $cod = null,
