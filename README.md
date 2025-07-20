@@ -38,6 +38,7 @@ $config = [
 
 ## Uruchomienie
 
+Przejść w kontekst folderu /inpost_test i wywołać komende:
 ```bash
 php create_shipment.php
 ```
